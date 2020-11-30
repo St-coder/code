@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Lodash 源码解析</h1>
+    <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.js"></script>
+    <script>
+       
+
+        function priceLt(x) {
+            let index =0;
+            return function(item) {
+                console.log(item, index++)
+                return item.price < x;
+            };
+        }
+        var gems = [{
+                name: 'Sunstone',
+                price: 4
+            }, {
+                name: 'Amethyst',
+                price: 15
+            },
+            {
+                name: 'Prehnite',
+                price: 20
+            }, {
+                name: 'Sugilite',
+                price: 7
+            },
+            {
+                name: 'Diopside',
+                price: 3
+            }, {
+                name: 'Feldspar',
+                price: 13
+            },
+            {
+                name: 'Dioptase',
+                price: 2
+            }, {
+                name: 'Sapphire',
+                price: 20
+            }
+        ];
+
+        var gems2 = _.clone(gems);
+        _.times(12,function() {
+            gems2 = _.concat(gems2,gems2);
+        });
+
+        console.log("从gems里面选择3个价格小于10的元素")
+        //惰性计算
+        console.time("惰性计算");
+        var chosen = _(gems).filter(priceLt(10)).take(3).value();
+        console.timeEnd("惰性计算");
+
+         //非惰性计算
+        console.time("非惰性计算");
+        var chosen2 = _.take(_.filter(gems, priceLt(10)), 3);
+        console.timeEnd("非惰性计算");
+
+
+
+        console.log("从gems2里面选择3000个价格小于10的元素")
+        //惰性计算
+        console.time("惰性计算");
+        var chosen1 = _(gems2).filter(priceLt(10)).take(3000).value();
+        console.timeEnd("惰性计算");
+
+        //非惰性计算
+        console.time("非惰性计算");
+        var chosen12 = _.take(_.filter(gems2, priceLt(10)), 3000);
+        console.timeEnd("非惰性计算");
+
+
+
+        console.log( _.slice([0,1,2,3,4], 3))
+    </script>
+</body>
+</html>
